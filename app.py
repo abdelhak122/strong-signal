@@ -828,60 +828,6 @@ def apply_custom_css():
     .stExpander>div>div {
         direction: rtl;
     }
-    .stExpander>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
-    .stExpander>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div>div {
-        direction: rtl;
-    }
     .signal-buy {
         color: #4CAF50;
         font-weight: bold;
@@ -932,8 +878,292 @@ def apply_custom_css():
     .tip-content {
         line-height: 1.6;
     }
+    .dashboard-container {
+        background-color: #2a2a45;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .metric-card {
+        background-color: #3a3a5a;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
+        height: 100%;
+    }
+    .metric-title {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        color: #aaa;
+    }
+    .metric-value {
+        font-size: 1.8em;
+        font-weight: bold;
+    }
+    .indicator-container {
+        display: flex;
+        flex-direction: column;
+        background-color: #3a3a5a;
+        padding: 15px;
+        border-radius: 5px;
+        height: 100%;
+    }
+    .indicator-title {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        color: #aaa;
+    }
+    .indicator-value {
+        font-size: 1.4em;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .indicator-details {
+        font-size: 0.9em;
+        color: #ddd;
+    }
+    .chart-container {
+        background-color: #3a3a5a;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .history-container {
+        background-color: #3a3a5a;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .instructions-container {
+        background-color: #3a3a5a;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+        border-left: 4px solid #4CAF50;
+    }
+    .instructions-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #4CAF50;
+    }
+    .instructions-step {
+        margin-bottom: 10px;
+        padding-right: 15px;
+        position: relative;
+    }
+    .instructions-step:before {
+        content: "•";
+        color: #4CAF50;
+        font-weight: bold;
+        position: absolute;
+        right: 0;
+    }
     </style>
     """, unsafe_allow_html=True)
+
+# عرض لوحة المعلومات الرئيسية
+def display_dashboard(analysis, selected_symbol_name):
+    st.markdown("<div class='dashboard-container'>", unsafe_allow_html=True)
+    
+    # صف المؤشرات الرئيسية
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div class='metric-card'>
+            <div class='metric-title'>الإشارة</div>
+            <div class='metric-value'>{}</div>
+        </div>
+        """.format(format_signal(analysis['signal'])), unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class='metric-card'>
+            <div class='metric-title'>نسبة الثقة</div>
+            <div class='metric-value'>{}</div>
+        </div>
+        """.format(format_confidence(analysis['confidence'])), unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class='metric-card'>
+            <div class='metric-title'>الاتجاه العام</div>
+            <div class='metric-value'>{}</div>
+        </div>
+        """.format(format_trend(analysis['trend'])), unsafe_allow_html=True)
+    
+    # صف السعر وأهداف الربح ووقف الخسارة
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        price_value = f"{analysis['last_close']:.5f}" if analysis['last_close'] is not None else "غير متوفر"
+        st.markdown(f"""
+        <div class='metric-card'>
+            <div class='metric-title'>السعر الحالي</div>
+            <div class='metric-value'>{price_value}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        tp_value = f"<span style='color:#4CAF50;'>{analysis['tp']:.5f}</span>" if analysis['tp'] is not None else "غير متوفر"
+        st.markdown(f"""
+        <div class='metric-card'>
+            <div class='metric-title'>هدف الربح</div>
+            <div class='metric-value'>{tp_value}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        sl_value = f"<span style='color:#f44336;'>{analysis['sl']:.5f}</span>" if analysis['sl'] is not None else "غير متوفر"
+        st.markdown(f"""
+        <div class='metric-card'>
+            <div class='metric-title'>وقف الخسارة</div>
+            <div class='metric-value'>{sl_value}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# عرض المؤشرات الفنية
+def display_technical_indicators(analysis):
+    st.markdown("<h3>المؤشرات الفنية</h3>", unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("<div class='indicator-container'>", unsafe_allow_html=True)
+        st.markdown("<div class='indicator-title'>RSI</div>", unsafe_allow_html=True)
+        
+        if analysis['rsi'] is not None:
+            if analysis['rsi'] > DEFAULT_SETTINGS['rsi_overbought']:
+                rsi_color = "#f44336"
+                rsi_status = "ذروة شراء"
+            elif analysis['rsi'] < DEFAULT_SETTINGS['rsi_oversold']:
+                rsi_color = "#4CAF50"
+                rsi_status = "ذروة بيع"
+            else:
+                rsi_color = "#FFC107"
+                rsi_status = "محايد"
+            
+            st.markdown(f"""
+            <div class='indicator-value' style='color:{rsi_color};'>{analysis['rsi']:.2f}</div>
+            <div class='indicator-details'>{rsi_status}</div>
+            <div class='indicator-details'>ذروة الشراء: {DEFAULT_SETTINGS['rsi_overbought']}</div>
+            <div class='indicator-details'>ذروة البيع: {DEFAULT_SETTINGS['rsi_oversold']}</div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("<div class='indicator-value'>غير متوفر</div>", unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("<div class='indicator-container'>", unsafe_allow_html=True)
+        st.markdown("<div class='indicator-title'>MACD</div>", unsafe_allow_html=True)
+        
+        if analysis['macd'] is not None and analysis['macd_signal'] is not None:
+            macd_diff = analysis['macd'] - analysis['macd_signal']
+            macd_color = "#4CAF50" if macd_diff > 0 else "#f44336"
+            macd_status = "إيجابي" if macd_diff > 0 else "سلبي"
+            
+            st.markdown(f"""
+            <div class='indicator-value' style='color:{macd_color};'>{analysis['macd']:.5f}</div>
+            <div class='indicator-details'>الإشارة: {analysis['macd_signal']:.5f}</div>
+            <div class='indicator-details'>الفرق: {macd_diff:.5f}</div>
+            <div class='indicator-details'>الحالة: {macd_status}</div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("<div class='indicator-value'>غير متوفر</div>", unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("<div class='indicator-container'>", unsafe_allow_html=True)
+        st.markdown("<div class='indicator-title'>ستوكاستيك</div>", unsafe_allow_html=True)
+        
+        if analysis['stoch_k'] is not None and analysis['stoch_d'] is not None:
+            if analysis['stoch_k'] > DEFAULT_SETTINGS['stoch_overbought'] and analysis['stoch_d'] > DEFAULT_SETTINGS['stoch_overbought']:
+                stoch_color = "#f44336"
+                stoch_status = "ذروة شراء"
+            elif analysis['stoch_k'] < DEFAULT_SETTINGS['stoch_oversold'] and analysis['stoch_d'] < DEFAULT_SETTINGS['stoch_oversold']:
+                stoch_color = "#4CAF50"
+                stoch_status = "ذروة بيع"
+            else:
+                stoch_color = "#FFC107"
+                stoch_status = "محايد"
+            
+            st.markdown(f"""
+            <div class='indicator-value' style='color:{stoch_color};'>%K: {analysis['stoch_k']:.2f}, %D: {analysis['stoch_d']:.2f}</div>
+            <div class='indicator-details'>{stoch_status}</div>
+            <div class='indicator-details'>ذروة الشراء: {DEFAULT_SETTINGS['stoch_overbought']}</div>
+            <div class='indicator-details'>ذروة البيع: {DEFAULT_SETTINGS['stoch_oversold']}</div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("<div class='indicator-value'>غير متوفر</div>", unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+
+# عرض تفاصيل الإشارات ومستويات الدعم والمقاومة
+def display_signal_details(analysis):
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("<h3>تفاصيل الإشارات</h3>", unsafe_allow_html=True)
+        
+        if analysis['signals_details']:
+            for detail in analysis['signals_details']:
+                st.markdown(f"• {detail}")
+        else:
+            st.markdown("لا توجد إشارات كافية لاتخاذ قرار.")
+    
+    with col2:
+        st.markdown("<h3>مستويات الدعم والمقاومة</h3>", unsafe_allow_html=True)
+        
+        col_a, col_b = st.columns(2)
+        
+        with col_a:
+            st.markdown("<h4>المقاومة</h4>", unsafe_allow_html=True)
+            if analysis['support_resistance']['resistance']:
+                for level in sorted(analysis['support_resistance']['resistance'], reverse=True):
+                    st.markdown(f"• {level:.5f}")
+            else:
+                st.markdown("لا توجد مستويات مقاومة محددة.")
+        
+        with col_b:
+            st.markdown("<h4>الدعم</h4>", unsafe_allow_html=True)
+            if analysis['support_resistance']['support']:
+                for level in sorted(analysis['support_resistance']['support'], reverse=True):
+                    st.markdown(f"• {level:.5f}")
+            else:
+                st.markdown("لا توجد مستويات دعم محددة.")
+
+# عرض تعليمات الاستخدام
+def display_instructions():
+    st.markdown("<div class='instructions-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='instructions-title'>📋 كيفية استخدام التطبيق</div>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class='instructions-step'>اختر الزوج أو الأداة المالية من القائمة المنسدلة في الشريط الجانبي.</div>
+    <div class='instructions-step'>حدد الإطار الزمني المناسب لتحليلك (1 دقيقة، 5 دقائق، 15 دقيقة، إلخ).</div>
+    <div class='instructions-step'>يمكنك تخصيص إعدادات المؤشرات الفنية من خلال قسم "إعدادات متقدمة" في الشريط الجانبي.</div>
+    <div class='instructions-step'>راقب لوحة المعلومات للحصول على الإشارات الحالية ونسبة الثقة والاتجاه العام.</div>
+    <div class='instructions-step'>استخدم هدف الربح ووقف الخسارة المقترحين لإدارة المخاطر في صفقاتك.</div>
+    <div class='instructions-step'>تحقق من تفاصيل الإشارات لفهم أسباب التوصية الحالية.</div>
+    <div class='instructions-step'>راجع الرسم البياني للحصول على تحليل بصري للسعر والمؤشرات الفنية.</div>
+    <div class='instructions-step'>اضغط على زر "تحديث الآن" في الشريط الجانبي للحصول على أحدث البيانات والتحليلات.</div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='instructions-title'>⚠️ تنبيه مهم</div>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class='instructions-step'>هذا التطبيق مخصص لأغراض تعليمية وإرشادية فقط وليس توصية للتداول.</div>
+    <div class='instructions-step'>يجب عليك دائماً إجراء تحليلك الخاص واستشارة مستشار مالي قبل اتخاذ أي قرارات استثمارية.</div>
+    <div class='instructions-step'>تذكر أن التداول ينطوي على مخاطر، ويمكن أن تخسر أكثر من استثمارك الأولي.</div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # الدالة الرئيسية للتطبيق
 def main():
@@ -1011,7 +1241,6 @@ def main():
             st.subheader("إعدادات أخرى")
             confidence_threshold = st.slider("حد الثقة للإشارة (%)", 50, 90, DEFAULT_SETTINGS['confidence_threshold'])
             risk_reward_ratio = st.slider("نسبة المخاطرة/المكافأة", 1.0, 3.0, float(DEFAULT_SETTINGS['risk_reward_ratio']), 0.1)
-            update_interval = st.slider("فترة التحديث (ثواني)", 5, 60, DEFAULT_SETTINGS['update_interval'])
             
             # خيارات العرض
             st.subheader("خيارات العرض")
@@ -1042,7 +1271,7 @@ def main():
             'volume_sma': DEFAULT_SETTINGS['volume_sma'],
             'risk_reward_ratio': risk_reward_ratio,
             'confidence_threshold': confidence_threshold,
-            'update_interval': update_interval,
+            'update_interval': DEFAULT_SETTINGS['update_interval'],
             'show_charts': show_charts,
             'save_history': save_history,
             'show_tips': show_tips,
@@ -1051,7 +1280,7 @@ def main():
         
         # زر التحديث اليدوي
         if st.button("تحديث الآن"):
-            st.experimental_rerun()
+            st.success("تم تحديث البيانات بنجاح!")
     
     # عرض نصيحة تداول عشوائية
     if settings['show_tips']:
@@ -1063,6 +1292,9 @@ def main():
         </div>
         """, unsafe_allow_html=True)
     
+    # إنشاء علامات تبويب للتنقل بين أقسام التطبيق
+    tabs = st.tabs(["📊 لوحة المعلومات", "📈 الرسوم البيانية", "📋 سجل الإشارات", "ℹ️ تعليمات الاستخدام"])
+    
     # جلب البيانات وتحليلها
     with st.spinner("جاري تحليل البيانات..."):
         df = fetch_data(selected_symbol, period=period, interval=timeframe)
@@ -1071,13 +1303,16 @@ def main():
             # تحليل البيانات
             analysis = analyze_price_action(df, settings)
             
-            # عرض النتائج
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                st.markdown("### الإشارة")
-                signal_html = format_signal(analysis['signal'])
-                st.markdown(f"<h2>{signal_html}</h2>", unsafe_allow_html=True)
+            # علامة تبويب لوحة المعلومات
+            with tabs[0]:
+                # عرض لوحة المعلومات الرئيسية
+                display_dashboard(analysis, selected_symbol_name)
+                
+                # عرض المؤشرات الفنية
+                display_technical_indicators(analysis)
+                
+                # عرض تفاصيل الإشارات ومستويات الدعم والمقاومة
+                display_signal_details(analysis)
                 
                 if analysis['signal'] != "لا توجد إشارة" and analysis['signal'] != "حدث خطأ":
                     # إضافة الإشارة إلى السجل إذا كانت جديدة
@@ -1092,150 +1327,52 @@ def main():
                                 analysis['confidence']
                             )
             
-            with col2:
-                st.markdown("### نسبة الثقة")
-                confidence_html = format_confidence(analysis['confidence'])
-                st.markdown(f"<h2>{confidence_html}</h2>", unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown("### الاتجاه العام")
-                trend_html = format_trend(analysis['trend'])
-                st.markdown(f"<h2>{trend_html}</h2>", unsafe_allow_html=True)
-            
-            # عرض السعر الحالي وأهداف الربح ووقف الخسارة
-            st.markdown("---")
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                st.markdown("### السعر الحالي")
-                if analysis['last_close'] is not None:
-                    st.markdown(f"<h3>{analysis['last_close']:.5f}</h3>", unsafe_allow_html=True)
+            # علامة تبويب الرسوم البيانية
+            with tabs[1]:
+                if settings['show_charts']:
+                    st.markdown("<h3>الرسم البياني</h3>", unsafe_allow_html=True)
+                    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+                    fig = create_technical_chart(df, selected_symbol_name)
+                    if fig:
+                        st.pyplot(fig)
+                    st.markdown("</div>", unsafe_allow_html=True)
                 else:
-                    st.markdown("<h3>غير متوفر</h3>", unsafe_allow_html=True)
+                    st.info("الرسوم البيانية معطلة. يمكنك تفعيلها من الإعدادات المتقدمة في الشريط الجانبي.")
             
-            with col2:
-                st.markdown("### هدف الربح")
-                if analysis['tp'] is not None:
-                    st.markdown(f"<h3 style='color:#4CAF50;'>{analysis['tp']:.5f}</h3>", unsafe_allow_html=True)
-                else:
-                    st.markdown("<h3>غير متوفر</h3>", unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown("### وقف الخسارة")
-                if analysis['sl'] is not None:
-                    st.markdown(f"<h3 style='color:#f44336;'>{analysis['sl']:.5f}</h3>", unsafe_allow_html=True)
-                else:
-                    st.markdown("<h3>غير متوفر</h3>", unsafe_allow_html=True)
-            
-            # عرض تفاصيل الإشارات
-            st.markdown("---")
-            st.markdown("### تفاصيل الإشارات")
-            if analysis['signals_details']:
-                for detail in analysis['signals_details']:
-                    st.markdown(f"- {detail}")
-            else:
-                st.markdown("لا توجد إشارات كافية لاتخاذ قرار.")
-            
-            # عرض مستويات الدعم والمقاومة
-            st.markdown("---")
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.markdown("### مستويات المقاومة")
-                if analysis['support_resistance']['resistance']:
-                    for level in sorted(analysis['support_resistance']['resistance'], reverse=True):
-                        st.markdown(f"- {level:.5f}")
-                else:
-                    st.markdown("لا توجد مستويات مقاومة محددة.")
-            
-            with col2:
-                st.markdown("### مستويات الدعم")
-                if analysis['support_resistance']['support']:
-                    for level in sorted(analysis['support_resistance']['support'], reverse=True):
-                        st.markdown(f"- {level:.5f}")
-                else:
-                    st.markdown("لا توجد مستويات دعم محددة.")
-            
-            # عرض قيم المؤشرات الفنية
-            st.markdown("---")
-            st.markdown("### قيم المؤشرات الفنية")
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                st.markdown("#### RSI")
-                if analysis['rsi'] is not None:
-                    if analysis['rsi'] > settings['rsi_overbought']:
-                        st.markdown(f"<span style='color:#f44336;font-weight:bold;'>{analysis['rsi']:.2f}</span> (ذروة شراء)", unsafe_allow_html=True)
-                    elif analysis['rsi'] < settings['rsi_oversold']:
-                        st.markdown(f"<span style='color:#4CAF50;font-weight:bold;'>{analysis['rsi']:.2f}</span> (ذروة بيع)", unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"{analysis['rsi']:.2f} (محايد)")
-                else:
-                    st.markdown("غير متوفر")
-            
-            with col2:
-                st.markdown("#### MACD")
-                if analysis['macd'] is not None and analysis['macd_signal'] is not None:
-                    macd_diff = analysis['macd'] - analysis['macd_signal']
-                    if macd_diff > 0:
-                        st.markdown(f"<span style='color:#4CAF50;'>{analysis['macd']:.5f}</span> (إيجابي)", unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"<span style='color:#f44336;'>{analysis['macd']:.5f}</span> (سلبي)", unsafe_allow_html=True)
-                    st.markdown(f"الإشارة: {analysis['macd_signal']:.5f}")
-                    st.markdown(f"الفرق: {macd_diff:.5f}")
-                else:
-                    st.markdown("غير متوفر")
-            
-            with col3:
-                st.markdown("#### ستوكاستيك")
-                if analysis['stoch_k'] is not None and analysis['stoch_d'] is not None:
-                    if analysis['stoch_k'] > settings['stoch_overbought'] and analysis['stoch_d'] > settings['stoch_overbought']:
-                        st.markdown(f"<span style='color:#f44336;'>%K: {analysis['stoch_k']:.2f}, %D: {analysis['stoch_d']:.2f}</span> (ذروة شراء)", unsafe_allow_html=True)
-                    elif analysis['stoch_k'] < settings['stoch_oversold'] and analysis['stoch_d'] < settings['stoch_oversold']:
-                        st.markdown(f"<span style='color:#4CAF50;'>%K: {analysis['stoch_k']:.2f}, %D: {analysis['stoch_d']:.2f}</span> (ذروة بيع)", unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"%K: {analysis['stoch_k']:.2f}, %D: {analysis['stoch_d']:.2f} (محايد)")
-                else:
-                    st.markdown("غير متوفر")
-            
-            # عرض الرسم البياني
-            if settings['show_charts']:
-                st.markdown("---")
-                st.markdown("### الرسم البياني")
-                fig = create_technical_chart(df, selected_symbol_name)
-                if fig:
-                    st.pyplot(fig)
-            
-            # عرض سجل الإشارات
-            if settings['save_history'] and signal_history:
-                st.markdown("---")
-                st.markdown("### سجل الإشارات")
+            # علامة تبويب سجل الإشارات
+            with tabs[2]:
+                st.markdown("<h3>سجل الإشارات</h3>", unsafe_allow_html=True)
+                st.markdown("<div class='history-container'>", unsafe_allow_html=True)
                 
-                # إنشاء DataFrame من سجل الإشارات
-                history_df = pd.DataFrame(signal_history)
+                if settings['save_history'] and signal_history:
+                    # إنشاء DataFrame من سجل الإشارات
+                    history_df = pd.DataFrame(signal_history)
+                    
+                    # تنسيق العرض
+                    history_df.columns = ["الزوج", "الإشارة", "السعر", "الثقة", "التاريخ"]
+                    
+                    # عرض الجدول
+                    st.dataframe(history_df, use_container_width=True)
+                    
+                    # زر لمسح السجل
+                    if st.button("مسح السجل"):
+                        signal_history.clear()
+                        save_signal_history()
+                        st.success("تم مسح سجل الإشارات بنجاح.")
+                else:
+                    st.info("سجل الإشارات فارغ أو معطل. يمكنك تفعيل حفظ السجل من الإعدادات المتقدمة في الشريط الجانبي.")
                 
-                # تنسيق العرض
-                history_df.columns = ["الزوج", "الإشارة", "السعر", "الثقة", "التاريخ"]
-                
-                # عرض الجدول
-                st.dataframe(history_df, use_container_width=True)
-                
-                # زر لمسح السجل
-                if st.button("مسح السجل"):
-                    signal_history.clear()
-                    save_signal_history()
-                    st.success("تم مسح سجل الإشارات بنجاح.")
-                    st.experimental_rerun()
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            # علامة تبويب تعليمات الاستخدام
+            with tabs[3]:
+                display_instructions()
         else:
             st.error(f"لا يمكن جلب بيانات {selected_symbol_name}. تأكد من اتصالك بالإنترنت أو جرب زوجاً آخر.")
     
-    # إضافة معلومات التحديث التلقائي
+    # إضافة معلومات التحديث
     st.markdown("---")
-    st.markdown(f"<div style='text-align:center;color:#aaa;font-size:0.8em;'>يتم تحديث البيانات كل {settings['update_interval']} ثانية. آخر تحديث: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</div>", unsafe_allow_html=True)
-    
-    # إعداد التحديث التلقائي
-    time.sleep(1)
-    st.experimental_rerun()
+    st.markdown(f"<div style='text-align:center;color:#aaa;font-size:0.8em;'>آخر تحديث: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</div>", unsafe_allow_html=True)
 
 # تشغيل التطبيق
 if __name__ == "__main__":
