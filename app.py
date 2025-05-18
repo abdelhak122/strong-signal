@@ -274,48 +274,41 @@ def apply_custom_css():
         margin-bottom: 20px;
     }
     
-    .report-table {
+    /* Custom styling for Streamlit table */
+    .custom-table {
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        direction: rtl;
-    }
-    
-    .report-table th {
-        background-color: #ffc107;
-        color: #0e1525;
         text-align: center;
-        padding: 10px;
-        font-weight: bold;
     }
     
-    .report-table td {
-        padding: 10px;
-        text-align: center;
-        border: 1px solid #1e293b;
+    .custom-table th {
+        background-color: #ffc107 !important;
+        color: #0e1525 !important;
+        text-align: center !important;
+        font-weight: bold !important;
+        padding: 10px !important;
     }
     
-    .report-table tr:nth-child(odd) {
-        background-color: #1e293b;
+    .custom-table td {
+        text-align: center !important;
+        padding: 10px !important;
     }
     
-    .report-table tr:nth-child(even) {
-        background-color: #0f172a;
-    }
-    
+    /* Style for buy signal */
     .buy-signal {
-        color: #4ade80;
-        font-weight: bold;
+        color: #4ade80 !important;
+        font-weight: bold !important;
     }
     
+    /* Style for sell signal */
     .sell-signal {
-        color: #f87171;
-        font-weight: bold;
+        color: #f87171 !important;
+        font-weight: bold !important;
     }
     
+    /* Style for no signal */
     .no-signal {
-        color: #94a3b8;
-        font-style: italic;
+        color: #94a3b8 !important;
+        font-style: italic !important;
     }
     
     .footer {
@@ -347,17 +340,33 @@ def apply_custom_css():
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* Fix for dataframe styling */
+    .dataframe {
+        text-align: right !important;
+    }
+    
+    .dataframe th {
+        background-color: #ffc107 !important;
+        color: #0e1525 !important;
+        text-align: center !important;
+    }
+    
+    .dataframe td {
+        text-align: center !important;
+    }
+    
+    /* Yellow header styling */
+    .yellow-header {
+        background-color: #ffc107;
+        color: #0e1525;
+        font-weight: bold;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+    }
     </style>
     """, unsafe_allow_html=True)
-
-# Format signal text in Arabic
-def format_signal(signal):
-    if signal == "buy":
-        return '<span class="buy-signal">شراء</span>'
-    elif signal == "sell":
-        return '<span class="sell-signal">بيع</span>'
-    else:
-        return '<span class="no-signal">لا توجد إشارة</span>'
 
 # Main function
 def main():
@@ -391,17 +400,22 @@ def main():
         if st.button("تحديث الآن"):
             st.success("✅ تم التحديث بنجاح!")
     
-    # Create table header
-    table_html = """
-    <table class="report-table">
-        <tr>
-            <th>الرمز</th>
-            <th>السعر الحالي</th>
-            <th>الإشارة</th>
-            <th>هدف الربح (TP)</th>
-            <th>وقف الخسارة (SL)</th>
-        </tr>
-    """
+    # Create table headers using columns
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    with col1:
+        st.markdown('<div class="yellow-header">الرمز</div>', unsafe_allow_html=True)
+    with col2:
+        st.markdown('<div class="yellow-header">السعر الحالي</div>', unsafe_allow_html=True)
+    with col3:
+        st.markdown('<div class="yellow-header">الإشارة</div>', unsafe_allow_html=True)
+    with col4:
+        st.markdown('<div class="yellow-header">هدف الربح (TP)</div>', unsafe_allow_html=True)
+    with col5:
+        st.markdown('<div class="yellow-header">وقف الخسارة (SL)</div>', unsafe_allow_html=True)
+    
+    # Create a DataFrame to store all data
+    data = []
     
     # Process all symbols
     for symbol_name, symbol in SYMBOLS.items():
@@ -413,50 +427,67 @@ def main():
                 analysis = analyze_price_action(df, SETTINGS)
                 
                 # Format values
-                current_price = f"{analysis['last_close']:.2f}" if analysis['last_close'] is not None else "-"
-                tp_value = f"{analysis['tp']:.2f}" if analysis['tp'] is not None else "-"
-                sl_value = f"{analysis['sl']:.2f}" if analysis['sl'] is not None else "-"
-                signal_text = format_signal(analysis['signal'])
+                current_price = analysis['last_close'] if analysis['last_close'] is not None else None
+                tp_value = analysis['tp'] if analysis['tp'] is not None else None
+                sl_value = analysis['sl'] if analysis['sl'] is not None else None
                 
-                # Add row to table
-                table_html += f"""
-                <tr>
-                    <td>{symbol_name}</td>
-                    <td>{current_price}</td>
-                    <td>{signal_text}</td>
-                    <td>{tp_value}</td>
-                    <td>{sl_value}</td>
-                </tr>
-                """
+                # Add to data
+                data.append({
+                    'symbol': symbol_name,
+                    'price': current_price,
+                    'signal': analysis['signal'],
+                    'tp': tp_value,
+                    'sl': sl_value
+                })
             else:
                 # Add empty row if data fetch failed
-                table_html += f"""
-                <tr>
-                    <td>{symbol_name}</td>
-                    <td>-</td>
-                    <td><span class="no-signal">لا توجد بيانات</span></td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                """
+                data.append({
+                    'symbol': symbol_name,
+                    'price': None,
+                    'signal': 'no_data',
+                    'tp': None,
+                    'sl': None
+                })
         except Exception as e:
             st.error(f"Error processing {symbol_name}: {str(e)}")
             # Add error row
-            table_html += f"""
-            <tr>
-                <td>{symbol_name}</td>
-                <td>-</td>
-                <td><span class="no-signal">خطأ</span></td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-            """
+            data.append({
+                'symbol': symbol_name,
+                'price': None,
+                'signal': 'error',
+                'tp': None,
+                'sl': None
+            })
     
-    # Close table
-    table_html += "</table>"
+    # Create DataFrame
+    df_signals = pd.DataFrame(data)
     
-    # Display table
-    st.markdown(table_html, unsafe_allow_html=True)
+    # Display each row using columns for better control
+    for _, row in df_signals.iterrows():
+        col1, col2, col3, col4, col5 = st.columns(5)
+        
+        with col1:
+            st.write(row['symbol'])
+        
+        with col2:
+            price_text = f"{row['price']:.2f}" if row['price'] is not None else "-"
+            st.write(price_text)
+        
+        with col3:
+            if row['signal'] == 'buy':
+                st.markdown('<span style="color:#4ade80;font-weight:bold;">شراء</span>', unsafe_allow_html=True)
+            elif row['signal'] == 'sell':
+                st.markdown('<span style="color:#f87171;font-weight:bold;">بيع</span>', unsafe_allow_html=True)
+            else:
+                st.markdown('<span style="color:#94a3b8;font-style:italic;">لا توجد إشارة</span>', unsafe_allow_html=True)
+        
+        with col4:
+            tp_text = f"{row['tp']:.2f}" if row['tp'] is not None else "-"
+            st.write(tp_text)
+        
+        with col5:
+            sl_text = f"{row['sl']:.2f}" if row['sl'] is not None else "-"
+            st.write(sl_text)
     
     # Footer with contact info
     st.markdown("""
